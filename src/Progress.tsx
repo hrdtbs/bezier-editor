@@ -1,20 +1,21 @@
+import { BezierEditorValue } from "./BezierEditor"
 import { Position, usePosition } from "./usePosition"
 import { bezier } from "./bezier-easing"
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 
 interface ProgressProps {
-    value: [number, number, number, number]
+    value: BezierEditorValue
     progress: number
     color: string
     position: Position
 }
 
-export const Progress: React.FC<ProgressProps> = ({
+export const Progress: React.FC<ProgressProps> = memo(function Progress({
     value,
     progress,
     color,
     position,
-}) => {
+}) {
     const { x, y } = usePosition(position)
     const easing = useMemo(() => {
         return bezier(...value)
@@ -27,4 +28,4 @@ export const Progress: React.FC<ProgressProps> = ({
     const py = y(easing ? easing(progress) : 0)
     const prog = `M${px},${sy} L${px},${py} L${sx},${py}`
     return <path fill="none" strokeWidth="1px" stroke={color} d={prog} />
-}
+})

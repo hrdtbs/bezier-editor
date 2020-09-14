@@ -1,19 +1,20 @@
+import { BezierEditorValue } from "./BezierEditor"
 import { Position, usePosition } from "./usePosition"
-import React, { useMemo } from "react"
+import React, { memo, useMemo } from "react"
 
 interface CurveProps {
     color: string
     width: React.ReactText
-    value: number[]
+    value: BezierEditorValue
     position: Position
 }
 
-export const Curve: React.FC<CurveProps> = ({
+export const Curve: React.FC<CurveProps> = memo(function Curve({
     color,
     width,
     value,
     position,
-}) => {
+}) {
     const { x, y } = usePosition(position)
 
     const curve = useMemo(() => {
@@ -29,4 +30,4 @@ export const Curve: React.FC<CurveProps> = ({
     }, [value, x, y])
 
     return <path fill="none" stroke={color} strokeWidth={width} d={curve} />
-}
+})

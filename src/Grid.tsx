@@ -1,5 +1,5 @@
 import { Position, usePosition } from "./usePosition"
-import React from "react"
+import React, { memo } from "react"
 
 const range = (from: number, to: number, step: number) => {
     const t = []
@@ -14,16 +14,20 @@ export interface GridProps {
     position: Position
     xAxisLabel?: string
     yAxisLabel?: string
+    xAxisLabelRef?: React.ClassAttributes<SVGTextElement>["ref"]
+    yAxisLabelRef?: React.ClassAttributes<SVGTextElement>["ref"]
 }
 
-export const Grid: React.FC<GridProps> = ({
+export const Grid: React.FC<GridProps> = memo(function Grid({
     background,
     color,
     textStyle,
     position,
     xAxisLabel,
     yAxisLabel,
-}) => {
+    xAxisLabelRef,
+    yAxisLabelRef,
+}) {
     const { x, y } = usePosition(position)
     const sx = x(0)
     const sy = y(0)
@@ -82,6 +86,7 @@ export const Grid: React.FC<GridProps> = ({
                 transform="rotate(-90)"
                 x={-y(1)}
                 y={x(0) - 8}
+                ref={yAxisLabelRef}
             >
                 {yAxisLabel}
             </text>
@@ -94,9 +99,10 @@ export const Grid: React.FC<GridProps> = ({
                 textAnchor="end"
                 x={x(1)}
                 y={y(0) + 5}
+                ref={xAxisLabelRef}
             >
                 {xAxisLabel}
             </text>
         </g>
     )
-}
+})

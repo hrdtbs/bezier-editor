@@ -1,5 +1,5 @@
 import { Position, usePosition } from "./usePosition"
-import React from "react"
+import React, { memo } from "react"
 
 export interface HandleProps {
     index: number
@@ -23,7 +23,7 @@ export interface HandleProps {
     position: Position
 }
 
-export const Handle: React.FC<HandleProps> = ({
+export const Handle: React.FC<HandleProps> = memo(function Handle({
     index,
     handleRadius,
     handleColor,
@@ -37,7 +37,7 @@ export const Handle: React.FC<HandleProps> = ({
     onMouseLeave,
     onMouseDown,
     position,
-}) => {
+}) {
     const { x, y } = usePosition(position)
 
     const sx = x(index)
@@ -71,4 +71,4 @@ export const Handle: React.FC<HandleProps> = ({
             />
         </g>
     )
-}
+})

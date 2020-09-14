@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Meta, Story } from "@storybook/react/types-6-0"
 
@@ -10,16 +10,6 @@ export default {
     argTypes: {},
 } as Meta
 
-const Template: Story<BezierEditorProps> = (args) => {
-    const [value, setValue] = useState<[number, number, number, number]>([
-        0.2,
-        0.2,
-        0.8,
-        0.8,
-    ])
-    return (
-        <BezierEditor {...args} value={value} onChange={(v) => setValue(v)} />
-    )
-}
+const Template: Story<BezierEditorProps> = (args) => <BezierEditor {...args} />
 
 export const BasicUsage = Template.bind({})

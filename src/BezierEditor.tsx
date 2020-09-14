@@ -2,27 +2,29 @@ import { Curve } from "./Curve"
 import { Grid } from "./Grid"
 import { Handle } from "./Handle"
 import { Progress } from "./Progress"
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 
+export type BezierEditorValue = [number, number, number, number]
 export interface BezierEditorProps {
-    value: [number, number, number, number]
-    onChange: (value: [number, number, number, number]) => void
-    width: number
-    height: number
-    handleRadius: number
-    style: React.CSSProperties
-    progress: number
-    handleStroke: number
-    background: string
-    gridColor: string
-    curveColor: string
-    curveWidth: number
-    handleColor: string
-    color: string
-    textStyle: React.CSSProperties
-    progressColor: string
-    readOnly: boolean
-    className: string
+    defaultValue?: BezierEditorValue
+    value?: BezierEditorValue
+    onChange?: (value: BezierEditorValue) => void
+    width?: number
+    height?: number
+    handleRadius?: number
+    style?: React.CSSProperties
+    progress?: number
+    handleStroke?: number
+    background?: string
+    gridColor?: string
+    curveColor?: string
+    curveWidth?: number
+    handleColor?: string
+    color?: string
+    textStyle?: React.CSSProperties
+    progressColor?: string
+    readOnly?: boolean
+    className?: string
     xAxisLabel?: string
     yAxisLabel?: string
 }
@@ -32,14 +34,9 @@ const defaultTextStyle = {
     fontSize: "10px",
 }
 
-const defaultPointers = {
-    down: "none",
-    hover: "pointer",
-    def: "default",
-}
-
 export const BezierEditor: React.FC<BezierEditorProps> = ({
-    value = [0.25, 0.25, 0.75, 0.75],
+    defaultValue = [0.25, 0.25, 0.75, 0.75],
+    value: valueProp,
     width = 300,
     height = 300,
     progress = 0,
@@ -52,7 +49,7 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     handleRadius = 5,
     handleStroke = 2,
     textStyle = defaultTextStyle,
-    onChange,
+    onChange: onChangeProp,
     style,
     readOnly,
     className,
@@ -60,99 +57,56 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     xAxisLabel,
     yAxisLabel,
 }) => {
-    const pointers = defaultPointers
-    const padding = [0, 0, xAxisLabel ? 20 : 0, yAxisLabel ? 20 : 0]
+    const [value, setValue] = useState(valueProp || defaultValue)
 
-    const [down, setDown] = useState<number | null>(0)
-    const [hover, setHover] = useState<number | null>(0)
-
-    const makeEnterHandler = useCallback(
-        (value: number) => {
-            return () => {
-                if (!down) {
-                    setHover(value)
-                }
+    const onChange = useCallback(
+        (value: BezierEditorValue) => {
+            setValue(value)
+            if (onChangeProp) {
+                onChangeProp(value)
             }
         },
-        [down]
+        [onChangeProp]
     )
-    const onEnterHandle1 = makeEnterHandler(1)
-    const onEnterHandle2 = makeEnterHandler(2)
 
-    const makeLeaveHandler = useCallback(() => {
-        return () => {
-            if (!down) {
-                setHover(null)
-            }
-        }
-    }, [down])
+    const rootRef = useRef<SVGSVGElement>(null)
 
-    const onLeaveHandle1 = makeLeaveHandler()
-    const onLeaveHandle2 = makeLeaveHandler()
-
-    const makeDownHander = useCallback((value: number) => {
-        return (event: React.MouseEvent) => {
-            event.preventDefault()
-            setHover(null)
-            setDown(value)
+    const [xAxisLabelHeight, setXAxisLabelHeight] = useState(0)
+    const xAxisLabelRef = useCallback((instance: SVGTextElement | null) => {
+        if (instance) {
+            setXAxisLabelHeight(instance.getBBox().height + 6)
         }
     }, [])
-
-    const onDownHandle1 = makeDownHander(1)
-    const onDownHandle2 = makeDownHander(2)
-
-    const ref = useRef<SVGSVGElement>(null)
-
-    const positionForEvent = (e: React.MouseEvent) => {
-        const rect = ref.current!.getBoundingClientRect()
-        return [e.clientX - rect.left, e.clientY - rect.top]
-    }
-    const x = (value: number) => {
+    const [yAxisLabelHeight, setYAxisLabelHeight] = useState(0)
+    const yAxisLabelRef = useCallback((instance: SVGTextElement | null) => {
+        if (instance) {
+            setYAxisLabelHeight(instance.getBBox().height + 6)
+        }
+    }, [])
+    const padding = useMemo(
+        () => [0, 0, 0 + xAxisLabelHeight, 0 + yAxisLabelHeight],
+        [xAxisLabelHeight, yAxisLabelHeight]
+    )
+    const [x, y, inversex, inversey] = useMemo(() => {
         const w = width - padding[1] - padding[3]
-        return Math.round(padding[3] + value * w)
-    }
-
-    const inversex = (x: number) => {
-        const w = width - padding[1] - padding[3]
-        return Math.max(0, Math.min((x - padding[3]) / w, 1))
-    }
-
-    const y = (value: number) => {
         const h = height - padding[0] - padding[2]
-        return Math.round(padding[0] + (1 - value) * h)
-    }
-
-    const inversey = (y: number) => {
         const clampMargin = 2 * handleRadius
-        const h = height - padding[0] - padding[2]
-        y = Math.max(clampMargin, Math.min(y, height - clampMargin))
-        return 1 - (y - padding[0]) / h
-    }
+        return [
+            (value: number) => Math.round(padding[3] + value * w),
+            (value: number) => Math.round(padding[0] + (1 - value) * h),
+            (x: number) => Math.max(0, Math.min((x - padding[3]) / w, 1)),
+            (y: number) => {
+                y = Math.max(clampMargin, Math.min(y, height - clampMargin))
+                return 1 - (y - padding[0]) / h
+            },
+        ]
+    }, [handleRadius, height, padding, width])
 
-    const onDownMove = (e: React.MouseEvent) => {
-        if (down) {
-            e.preventDefault()
-            const i = 2 * (down - 1)
-            const copy = value.concat() as typeof value
-            const [x, y] = positionForEvent(e)
-            copy[i] = inversex(x)
-            copy[i + 1] = inversey(y)
-            onChange(copy)
-        }
-    }
+    const [down, setDown] = useState(0)
+    const [hover, setHover] = useState(0)
 
-    const onDownLeave = (e: React.MouseEvent) => {
-        if (down) {
-            onDownMove(e)
-            setDown(null)
-        }
-    }
-    const onDownUp = () => {
-        setDown(0)
-    }
-
-    const sharedProps = {
-        position: {
+    const position = useMemo(
+        () => ({
             x: {
                 from: x(0),
                 to: x(1),
@@ -161,71 +115,130 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
                 from: y(0),
                 to: y(1),
             },
+        }),
+        [x, y]
+    )
+    /**
+     * Container Events
+     */
+    const onDownMove = useCallback(
+        (event: React.MouseEvent) => {
+            event.preventDefault()
+            const i = 2 * (down - 1)
+            const copy = value.concat() as typeof value
+            const rect = rootRef.current!.getBoundingClientRect()
+            const x = event.clientX - rect.left
+            const y = event.clientY - rect.top
+            copy[i] = inversex(x)
+            copy[i + 1] = inversey(y)
+            if (onChange) {
+                onChange(copy)
+            }
         },
-    }
-
-    const cursor = { ...defaultPointers, ...pointers }
-
-    const styles: React.CSSProperties = {
-        background,
-        cursor: down ? cursor.down : hover ? cursor.hover : cursor.def,
-        userSelect: "none",
-        ...style,
-    }
-
-    const containerEvents =
-        readOnly || !down
+        [down, inversex, inversey, onChange, value]
+    )
+    const onDownLeave = useCallback(
+        (e: React.MouseEvent) => {
+            onDownMove(e)
+            setDown(0)
+        },
+        [onDownMove]
+    )
+    const onDownUp = useCallback(() => {
+        setDown(0)
+    }, [])
+    const containerEvents = useMemo(() => {
+        return readOnly || !down
             ? {}
             : {
                   onMouseMove: onDownMove,
                   onMouseUp: onDownUp,
                   onMouseLeave: onDownLeave,
               }
-    const handle1Events =
-        readOnly || down
+    }, [down, onDownLeave, onDownMove, onDownUp, readOnly])
+    /**
+     * Handle1 Events
+     */
+    const onLeaveHandle = useCallback(() => {
+        setHover(0)
+    }, [])
+    const onEnterHandle1 = useCallback(() => {
+        setHover(1)
+    }, [])
+    const onDownHandle1 = useCallback((event: React.MouseEvent) => {
+        event.preventDefault()
+        setHover(0)
+        setDown(1)
+    }, [])
+    const handle1Events = useMemo(() => {
+        return readOnly || down
             ? {}
             : {
                   onMouseDown: onDownHandle1,
                   onMouseEnter: onEnterHandle1,
-                  onMouseLeave: onLeaveHandle1,
+                  onMouseLeave: onLeaveHandle,
               }
-    const handle2Events =
-        readOnly || down
+    }, [down, onDownHandle1, onEnterHandle1, onLeaveHandle, readOnly])
+    /**
+     * Handle2 Events
+     */
+    const onEnterHandle2 = useCallback(() => {
+        setHover(2)
+    }, [])
+    const onDownHandle2 = useCallback((event: React.MouseEvent) => {
+        event.preventDefault()
+        setHover(0)
+        setDown(2)
+    }, [])
+    const handle2Events = useMemo(() => {
+        return readOnly || down
             ? {}
             : {
                   onMouseDown: onDownHandle2,
                   onMouseEnter: onEnterHandle2,
-                  onMouseLeave: onLeaveHandle2,
+                  onMouseLeave: onLeaveHandle,
               }
+    }, [down, onDownHandle2, onEnterHandle2, onLeaveHandle, readOnly])
 
+    const gridTextStyle = useMemo(
+        () => ({
+            ...defaultTextStyle,
+            ...textStyle,
+        }),
+        [textStyle]
+    )
     return (
         <svg
-            ref={ref}
+            ref={rootRef}
             className={className}
-            style={styles}
+            style={{
+                background,
+                cursor: down ? "none" : hover ? "pointer" : "default",
+                userSelect: "none",
+                ...style,
+            }}
             width={width}
             height={height}
             {...containerEvents}
         >
             <Grid
-                {...sharedProps}
+                position={position}
                 xAxisLabel={xAxisLabel}
                 yAxisLabel={yAxisLabel}
                 background={background}
                 color={gridColor}
-                textStyle={{
-                    ...defaultTextStyle,
-                    ...textStyle,
-                }}
+                textStyle={gridTextStyle}
+                xAxisLabelRef={xAxisLabelRef}
+                yAxisLabelRef={yAxisLabelRef}
             />
             <Progress
-                {...sharedProps}
+                position={position}
                 value={value}
                 progress={progress}
                 color={progressColor}
             />
             <Curve
-                {...sharedProps}
+                position={position}
                 value={value}
                 color={curveColor}
                 width={curveWidth}
@@ -234,7 +247,7 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
             {readOnly ? undefined : (
                 <g>
                     <Handle
-                        {...sharedProps}
+                        position={position}
                         {...handle1Events}
                         index={0}
                         xval={value[0]}
@@ -247,7 +260,7 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
                         background={background}
                     />
                     <Handle
-                        {...sharedProps}
+                        position={position}
                         {...handle2Events}
                         index={1}
                         xval={value[2]}
