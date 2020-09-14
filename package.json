@@ -1,7 +1,7 @@
 {
-  "name": "react-ui",
-  "version": "1.0.0",
-  "repository": "git@github.com:hrdtbs/noname.git",
+  "name": "bezier-easing-field",
+  "version": "0.0.0",
+  "repository": "git@github.com:hrdtbs/bezier-easing-field.git",
   "author": "hrdtbs <harada.tsubasa.0422@gmail.com>",
   "license": "GPL-3.0",
   "main": "dist/index.cjs.js",
