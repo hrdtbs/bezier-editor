@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Meta, Story } from "@storybook/react/types-6-0"
 
@@ -17,22 +17,9 @@ const Template: Story<BezierEditorProps> = (args) => {
         0.8,
         0.8,
     ])
-    const [progress, setProgress] = useState(0)
-
-    useEffect(() => {
-        window.setInterval(() => {
-            setProgress((prev) => (prev >= 1 ? 0 : prev + 0.1))
-        }, 100)
-    }, [])
     return (
-        <BezierEditor
-            {...args}
-            value={value}
-            onChange={(v) => setValue(v)}
-            progress={progress}
-        />
+        <BezierEditor {...args} value={value} onChange={(v) => setValue(v)} />
     )
 }
 
-export const Primary = Template.bind({})
-Primary.args = {}
+export const BasicUsage = Template.bind({})

@@ -9,7 +9,6 @@ export interface BezierEditorProps {
     onChange: (value: [number, number, number, number]) => void
     width: number
     height: number
-    padding: number[]
     handleRadius: number
     style: React.CSSProperties
     progress: number
@@ -23,12 +22,9 @@ export interface BezierEditorProps {
     textStyle: React.CSSProperties
     progressColor: string
     readOnly: boolean
-    pointers: {
-        down: string
-        hover: string
-        def: string
-    }
     className: string
+    xAxisLabel?: string
+    yAxisLabel?: string
 }
 
 const defaultTextStyle = {
@@ -46,24 +42,27 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     value = [0.25, 0.25, 0.75, 0.75],
     width = 300,
     height = 300,
-    padding = [25, 5, 25, 18],
     progress = 0,
     background = "#fff",
     gridColor = "#eee",
     curveColor = "#333",
     progressColor = "#ccc",
-    handleColor = "#f00",
+    handleColor = "#F57D7C",
     curveWidth = 2,
     handleRadius = 5,
     handleStroke = 2,
     textStyle = defaultTextStyle,
-    pointers = defaultPointers,
     onChange,
     style,
     readOnly,
     className,
     children,
+    xAxisLabel,
+    yAxisLabel,
 }) => {
+    const pointers = defaultPointers
+    const padding = [0, 0, xAxisLabel ? 20 : 0, yAxisLabel ? 20 : 0]
+
     const [down, setDown] = useState<number | null>(0)
     const [hover, setHover] = useState<number | null>(0)
 
@@ -210,6 +209,8 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
         >
             <Grid
                 {...sharedProps}
+                xAxisLabel={xAxisLabel}
+                yAxisLabel={yAxisLabel}
                 background={background}
                 color={gridColor}
                 textStyle={{

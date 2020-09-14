@@ -12,6 +12,8 @@ export interface GridProps {
     color: string
     textStyle: React.CSSProperties
     position: Position
+    xAxisLabel?: string
+    yAxisLabel?: string
 }
 
 export const Grid: React.FC<GridProps> = ({
@@ -19,6 +21,8 @@ export const Grid: React.FC<GridProps> = ({
     color,
     textStyle,
     position,
+    xAxisLabel,
+    yAxisLabel,
 }) => {
     const { x, y } = usePosition(position)
     const sx = x(0)
@@ -79,7 +83,7 @@ export const Grid: React.FC<GridProps> = ({
                 x={-y(1)}
                 y={x(0) - 8}
             >
-                Progress Percentage
+                {yAxisLabel}
             </text>
             <path strokeWidth="1px" stroke={color} d={ticksBottom} />
             <text
@@ -91,7 +95,7 @@ export const Grid: React.FC<GridProps> = ({
                 x={x(1)}
                 y={y(0) + 5}
             >
-                Time Percentage
+                {xAxisLabel}
             </text>
         </g>
     )
