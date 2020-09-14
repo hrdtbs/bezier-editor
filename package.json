@@ -1,7 +1,7 @@
 {
-  "name": "bezier-easing-field",
+  "name": "bezier-editor",
   "version": "0.0.0",
-  "repository": "git@github.com:hrdtbs/bezier-easing-field.git",
+  "repository": "git@github.com:hrdtbs/bezier-editor.git",
   "author": "hrdtbs <harada.tsubasa.0422@gmail.com>",
   "license": "GPL-3.0",
   "main": "dist/index.cjs.js",
