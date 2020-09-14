@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.1](https://github.com/hrdtbs/bezier-editor/compare/v0.0.0...v0.0.1) (2020-09-14)
+
+
+### Documents
+
+* **README:** add Playground ([fd92a52](https://github.com/hrdtbs/bezier-editor/commit/fd92a52a84011553ee5cb2836b543b7cd6092e1c))
+* update ([b627804](https://github.com/hrdtbs/bezier-editor/commit/b627804383dbb5f9a4ef890100aed5b39dda1602))
+
+
+### Others
+
+* fix LICENSE ([d50cce8](https://github.com/hrdtbs/bezier-editor/commit/d50cce8b79d3c6d22f93d2a3ea936d359ca36045))
+
 ## 0.0.0 (2020-09-14)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "bezier-editor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "repository": "git@github.com:hrdtbs/bezier-editor.git",
   "author": "hrdtbs <harada.tsubasa.0422@gmail.com>",
   "license": "MIT",
