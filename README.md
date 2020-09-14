@@ -12,3 +12,7 @@ https://www.npmjs.com/package/bezier-editor
 ## DEMO
 
 https://hrdtbs.github.io/bezier-editor/?path=/docs/example-beziereditor--basic-usage
+
+## PLAYGROUND
+
+https://stackblitz.com/edit/bezier-editor-playground?file=index.tsx
