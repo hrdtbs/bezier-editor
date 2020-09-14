@@ -4,6 +4,11 @@
 
 This is an alternative to "bezier-easing-editor" and more customizable.
 
+
+## NPM
+
+https://www.npmjs.com/package/bezier-editor
+
 ## DEMO
 
 https://hrdtbs.github.io/bezier-editor/?path=/docs/example-beziereditor--basic-usage
