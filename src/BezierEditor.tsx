@@ -122,13 +122,21 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
      * Container Events
      */
     const onDownMove = useCallback(
-        (event: React.MouseEvent) => {
-            event.preventDefault()
+        (event: React.MouseEvent | React.TouchEvent) => {
             const i = 2 * (down - 1)
             const copy = value.concat() as typeof value
             const rect = rootRef.current!.getBoundingClientRect()
-            const x = event.clientX - rect.left
-            const y = event.clientY - rect.top
+            let x = 0
+            let y = 0
+            if ("clientX" in event) {
+                x = event.clientX - rect.left
+                y = event.clientY - rect.top
+            } else if (event.touches[0]) {
+                x = event.touches[0].clientX - rect.left
+                y = event.touches[0].clientY - rect.top
+            } else {
+                return
+            }
             copy[i] = inversex(x)
             copy[i + 1] = inversey(y)
             if (onChange) {
@@ -138,7 +146,7 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
         [down, inversex, inversey, onChange, value]
     )
     const onDownLeave = useCallback(
-        (e: React.MouseEvent) => {
+        (e: React.MouseEvent | React.TouchEvent) => {
             onDownMove(e)
             setDown(0)
         },
@@ -154,6 +162,9 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
                   onMouseMove: onDownMove,
                   onMouseUp: onDownUp,
                   onMouseLeave: onDownLeave,
+                  onTouchStart: onDownUp,
+                  onTouchEnd: onDownLeave,
+                  onTouchMove: onDownMove,
               }
     }, [down, onDownLeave, onDownMove, onDownUp, readOnly])
     /**
@@ -165,14 +176,10 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     const onEnterHandle1 = useCallback(() => {
         setHover(1)
     }, [])
-    const onDownHandle1 = useCallback(
-        (event: React.MouseEvent | React.TouchEvent) => {
-            event.preventDefault()
-            setHover(0)
-            setDown(1)
-        },
-        []
-    )
+    const onDownHandle1 = useCallback(() => {
+        setHover(0)
+        setDown(1)
+    }, [])
     const handle1Events: React.DOMAttributes<SVGCircleElement> = useMemo(() => {
         return readOnly || down
             ? {}
@@ -190,14 +197,10 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     const onEnterHandle2 = useCallback(() => {
         setHover(2)
     }, [])
-    const onDownHandle2 = useCallback(
-        (event: React.MouseEvent | React.TouchEvent) => {
-            event.preventDefault()
-            setHover(0)
-            setDown(2)
-        },
-        []
-    )
+    const onDownHandle2 = useCallback(() => {
+        setHover(0)
+        setDown(2)
+    }, [])
     const handle2Events: React.DOMAttributes<SVGCircleElement> = useMemo(() => {
         return readOnly || down
             ? {}
