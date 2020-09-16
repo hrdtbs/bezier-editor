@@ -1,7 +1,7 @@
 import { Position, usePosition } from "./usePosition"
-import React, { memo } from "react"
+import React, { ComponentProps, memo } from "react"
 
-export interface HandleProps {
+export interface HandleProps extends ComponentProps<"circle"> {
     index: number
     handleRadius: number
     handleColor: string
@@ -11,15 +11,6 @@ export interface HandleProps {
     handleStroke: number
     xval: number
     yval: number
-    onMouseEnter?: (
-        event: React.MouseEvent<SVGCircleElement, MouseEvent>
-    ) => void
-    onMouseLeave?: (
-        event: React.MouseEvent<SVGCircleElement, MouseEvent>
-    ) => void
-    onMouseDown?: (
-        event: React.MouseEvent<SVGCircleElement, MouseEvent>
-    ) => void
     position: Position
 }
 
@@ -33,10 +24,8 @@ export const Handle: React.FC<HandleProps> = memo(function Handle({
     handleStroke,
     xval,
     yval,
-    onMouseEnter,
-    onMouseLeave,
-    onMouseDown,
     position,
+    ...props
 }) {
     const { x, y } = usePosition(position)
 
@@ -65,9 +54,7 @@ export const Handle: React.FC<HandleProps> = memo(function Handle({
                 stroke={handleColor}
                 strokeWidth={hover || down ? 2 * handleStroke : handleStroke}
                 fill={down ? background : handleColor}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onMouseDown={onMouseDown}
+                {...props}
             />
         </g>
     )

@@ -165,18 +165,23 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     const onEnterHandle1 = useCallback(() => {
         setHover(1)
     }, [])
-    const onDownHandle1 = useCallback((event: React.MouseEvent) => {
-        event.preventDefault()
-        setHover(0)
-        setDown(1)
-    }, [])
-    const handle1Events = useMemo(() => {
+    const onDownHandle1 = useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+            event.preventDefault()
+            setHover(0)
+            setDown(1)
+        },
+        []
+    )
+    const handle1Events: React.DOMAttributes<SVGCircleElement> = useMemo(() => {
         return readOnly || down
             ? {}
             : {
                   onMouseDown: onDownHandle1,
                   onMouseEnter: onEnterHandle1,
                   onMouseLeave: onLeaveHandle,
+                  onTouchStart: onDownHandle1,
+                  onTouchEnd: onLeaveHandle,
               }
     }, [down, onDownHandle1, onEnterHandle1, onLeaveHandle, readOnly])
     /**
@@ -185,18 +190,23 @@ export const BezierEditor: React.FC<BezierEditorProps> = ({
     const onEnterHandle2 = useCallback(() => {
         setHover(2)
     }, [])
-    const onDownHandle2 = useCallback((event: React.MouseEvent) => {
-        event.preventDefault()
-        setHover(0)
-        setDown(2)
-    }, [])
-    const handle2Events = useMemo(() => {
+    const onDownHandle2 = useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+            event.preventDefault()
+            setHover(0)
+            setDown(2)
+        },
+        []
+    )
+    const handle2Events: React.DOMAttributes<SVGCircleElement> = useMemo(() => {
         return readOnly || down
             ? {}
             : {
                   onMouseDown: onDownHandle2,
                   onMouseEnter: onEnterHandle2,
                   onMouseLeave: onLeaveHandle,
+                  onTouchStart: onDownHandle2,
+                  onTouchEnd: onLeaveHandle,
               }
     }, [down, onDownHandle2, onEnterHandle2, onLeaveHandle, readOnly])
 
