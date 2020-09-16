@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/hrdtbs/bezier-editor/compare/v0.0.1...v1.0.0) (2020-09-16)
+
+
+### Features
+
+* add support of mobile ([b1c2a21](https://github.com/hrdtbs/bezier-editor/commit/b1c2a213e0e43d9dbc86c24771da0205c7e8c8f0))
+
+
+### Bug Fixes
+
+* improve behavior on mobile ([3976864](https://github.com/hrdtbs/bezier-editor/commit/39768642db396c145f4d519bef442fb09b3d0048))
+
+
+### Others
+
+* **stories:** add new examples ([187087b](https://github.com/hrdtbs/bezier-editor/commit/187087befc4159f5b054c6944d5efc430276e7cf))
+* strict type ([c753e33](https://github.com/hrdtbs/bezier-editor/commit/c753e332e10a4d71d290f712588e211020cd1ebd))
+* **deps:** update commitlint monorepo to v11 ([23fb07f](https://github.com/hrdtbs/bezier-editor/commit/23fb07f398fa0aed9f16d408221a706be58b6c24))
+* **deps:** update dependency prettier to v2.1.2 ([e6073f4](https://github.com/hrdtbs/bezier-editor/commit/e6073f454a2ca7f82e0a1ac6756948bcf8552fe7))
+
 ### [0.0.1](https://github.com/hrdtbs/bezier-editor/compare/v0.0.0...v0.0.1) (2020-09-14)
 
 
