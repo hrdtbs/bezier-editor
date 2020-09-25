@@ -55,7 +55,7 @@
     "rollup": "2.26.11",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-typescript2": "0.27.2",
+    "rollup-plugin-typescript2": "0.27.3",
     "standard-version": "9.0.0",
     "stylelint": "13.7.1",
     "stylelint-config-recess-order": "2.1.0",
