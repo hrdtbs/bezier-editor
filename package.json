@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "4.1.1",
     "babel-plugin-emotion": "10.0.33",
     "eslint": "7.8.1",
-    "eslint-config-prettier": "6.11.0",
+    "eslint-config-prettier": "7.0.0",
     "eslint-plugin-jsx-a11y": "6.3.1",
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.20.6",
