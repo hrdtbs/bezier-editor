@@ -19,8 +19,8 @@
     "node_modules"
   ],
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/core": "7.11.6",
@@ -51,7 +51,7 @@
     "lint-staged": "10.5.4",
     "npm-run-all": "4.1.5",
     "prettier": "2.3.2",
-    "react-is": "16.13.1",
+    "react-is": "17.0.2",
     "rollup": "2.52.4",
     "rollup-plugin-babel": "4.4.0",
     "rollup-plugin-commonjs": "10.1.0",
@@ -117,7 +117,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
