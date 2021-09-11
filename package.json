@@ -12,7 +12,8 @@
         "README.md",
         "CHANGELOG.md",
         "dist/",
-        "package.json"
+        "package.json",
+        "LICENSE"
     ],
     "eslintIgnore": [
         "dist",
