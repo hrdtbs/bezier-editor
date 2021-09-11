@@ -61,7 +61,7 @@
     "standard-version": "9.3.0",
     "stylelint": "13.13.1",
     "stylelint-config-recess-order": "2.4.0",
-    "stylelint-config-recommended": "3.0.0",
+    "stylelint-config-recommended": "5.0.0",
     "stylelint-config-styled-components": "0.1.1",
     "tslib": "2.3.0",
     "typescript": "4.3.4"
